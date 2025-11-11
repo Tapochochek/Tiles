@@ -12,6 +12,7 @@ public class MapCreator : MonoBehaviour
         if (GlobalContainer.firstStep)
         {
             GlobalContainer.allTiles.Add(gameObject);
+            GlobalContainer.trueAllTiles.Add(gameObject);
             GlobalContainer.firstStep = false;
             for (int i = 0; i < gameObject.transform.childCount; i++)
             {
@@ -24,6 +25,7 @@ public class MapCreator : MonoBehaviour
             GameObject tile = Instantiate(prefab, GlobalContainer.availablePlaces[rand].transform.position, GlobalContainer.availablePlaces[rand].transform.rotation);
             tile.name = "Tile " + (GlobalContainer.allTiles.Count + 1);
             GlobalContainer.allTiles.Add(tile);
+            GlobalContainer.trueAllTiles.Add(gameObject);
             for (int i = 0; i < tile.transform.childCount-1; i++)
             {
                 GlobalContainer.availablePlaces.Add(tile.transform.GetChild(i).gameObject);

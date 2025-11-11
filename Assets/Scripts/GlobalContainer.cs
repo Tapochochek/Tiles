@@ -16,11 +16,13 @@ public class GlobalContainer : MonoBehaviour
     public static int MaxMapSize = 300;   
     public static bool firstStep = true;
     private bool completed = false;
-    private float hexRadius = 1.8f;
+    public static float hexRadius = 1.8f;
     private float radiusSpawn;
 
     //все тайлы надо для правильной генерации карты, по ходу генерации удаляются доступные, тоетсь на которых чето уже стоит
     public static List<GameObject> allTiles = new List<GameObject>();
+
+    public static List<GameObject> trueAllTiles = new List<GameObject>();
 
     //доступные места для спавна новых тайлов
     public static List<GameObject> availablePlaces = new List<GameObject>();
@@ -47,12 +49,12 @@ public class GlobalContainer : MonoBehaviour
     private void Start()
     {
         usedMaterials = materials;
-        radiusSpawn = hexRadius * 2;        
+        radiusSpawn = hexRadius * 2;
     }
 
     private void Update()
     {
-        //выполняем пока не построена карта
+        
         if (MaxMapSize<=0 && !completed)
         {
             int i = 0;

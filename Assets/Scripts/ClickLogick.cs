@@ -11,8 +11,10 @@ public class ClickLogick : MonoBehaviour
     private static int turnIndex = 0;
 
     public Material mat;
+    public Material moveMat;
     private List<Material> listMaterials;
     private List<MeshRenderer> meshRenderers;
+    private static GameObject currenUnit;
 
     [System.Serializable]
     public class BuildingEntry
@@ -22,25 +24,31 @@ public class ClickLogick : MonoBehaviour
     }
     public List<BuildingEntry> buildingEntries;
 
-    private static GameObject selectedTiles;
+    private static GameObject selectedTile;
+    private static List<GameObject> selectedTiles = new List<GameObject>();
+
+    private void OnMouseOver()
+    {
+        RightClickOnZone(gameObject);
+    }
     private void OnMouseDown()
-    {        
-        if (selectedTiles != gameObject)
+    {       
+        if (selectedTile != gameObject)
         {
-            if (selectedTiles != null)
+            if (selectedTile != null)
             {
-                OpenBuildMenu(selectedTiles);
-                listMaterials = selectedTiles.GetComponent<MeshRenderer>().materials.ToList();
+                //OpenBuildMenu(selectedTiles);
+                listMaterials = selectedTile.GetComponent<MeshRenderer>().materials.ToList();
                 listMaterials.RemoveAt(1);
-                selectedTiles.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-                for (int i = 0; i < selectedTiles.transform.childCount; i++)
+                selectedTile.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+                for (int i = 0; i < selectedTile.transform.childCount; i++)
                 {
-                    if (selectedTiles.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-                        listMaterials = selectedTiles.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
+                    if (selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+                        listMaterials = selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
                     else
                         continue;
                     listMaterials.RemoveAt(1);
-                    selectedTiles.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+                    selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
                 }
             }
             
@@ -59,25 +67,85 @@ public class ClickLogick : MonoBehaviour
                 }
                 gameObject.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
             }
-            selectedTiles = gameObject;
+            selectedTile = gameObject;
             
         }
     }
-
-    private void OpenBuildMenu(GameObject selestedTile)
+    public void SelectedMultiply(GameObject unit)
     {
-        foreach (var entry in buildingEntries)
+        currenUnit = unit;
+        selectedTiles.Add(gameObject);
+        listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
+        for (int i = 0; i < gameObject.transform.childCount; i++)
         {
-            entry.button.onClick.RemoveAllListeners();
-            entry.button.onClick.AddListener(() => BuildStructure(entry.building, selestedTile));
+            if (gameObject.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+                listMaterials = gameObject.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
+            else
+                continue;
+            gameObject.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+        }
+        meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>().ToList();
+        meshRenderers.Add(gameObject.GetComponent<MeshRenderer>());
+        listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
+        if (!listMaterials.Contains(moveMat))
+        {
+            listMaterials.Add(moveMat);
+            if (meshRenderers != null)
+            {
+                foreach (var item in meshRenderers)
+                {
+                    item.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+                }
+            }
+            gameObject.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
         }
     }
+    public void Diselected()
+    {
+        if (selectedTile != null)
+        {
+            listMaterials = selectedTile.GetComponent<MeshRenderer>().materials.ToList();
+            listMaterials.RemoveAt(1);
+            selectedTile.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+            for (int i = 0; i < selectedTile.transform.childCount; i++)
+            {
+                if (selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+                    listMaterials = selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
+                else
+                    continue;
+                listMaterials.RemoveAt(1);
+                selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+            }
+            selectedTiles = null;
+        }
+    }
+
+    //private void OpenBuildMenu(GameObject selestedTile)
+    //{
+    //    foreach (var entry in buildingEntries)
+    //    {
+    //        entry.button.onClick.RemoveAllListeners();
+    //        entry.button.onClick.AddListener(() => BuildStructure(entry.building, selestedTile));
+    //    }
+    //}
 
     private void BuildStructure(GameObject building, GameObject selectedTile)
     {
         if (selectedTiles != null)
         {            
             Instantiate(building, selectedTile.transform.position, building.transform.rotation);
+        }
+    }
+    private static void RightClickOnZone(GameObject objects)
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("RightClick");
+            if (selectedTiles != null && selectedTiles.Contains(objects))
+            {
+                currenUnit.transform.position = objects.transform.position + new Vector3(0, 0.5f, 0);
+                currenUnit.transform.parent = objects.transform;
+            }
         }
     }
 }
