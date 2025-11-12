@@ -15,6 +15,7 @@ public class ClickLogick : MonoBehaviour
     private List<Material> listMaterials;
     private List<MeshRenderer> meshRenderers;
     private static GameObject currenUnit;
+    private static GameObject selectedTile;
 
     [System.Serializable]
     public class BuildingEntry
@@ -24,136 +25,62 @@ public class ClickLogick : MonoBehaviour
     }
     public List<BuildingEntry> buildingEntries;
 
-    private static GameObject selectedTile;
     private static List<GameObject> selectedTiles = new List<GameObject>();
 
     private void OnMouseOver()
     {
         RightClickOnZone(gameObject);
     }
+    // Готовый метод выделения тайла
     private void OnMouseDown()
+    {
+        //Проверка если ни одни тайл не выделен
+        if (selectedTile != null)
+            Diselected(selectedTile);
+        //Снятие выделения со всех выделенных тайлов
+        MultiplyDiselected();
+        //Выделение текущего тайла
+        PaintingTiles(mat);
+        selectedTile = gameObject;
+    }
+
+    public void SelectedMultiply(GameObject unit)
+    {
+        currenUnit = unit;
+        if (selectedTile != null)
+            Diselected(selectedTile);
+        selectedTiles.Add(gameObject);
+        PaintingTiles(moveMat);
+    }
+    public void Diselected(GameObject tile)
+    {
+        listMaterials = tile.GetComponent<MeshRenderer>().materials.ToList();
+        if (!(listMaterials.Count < 2))
+            listMaterials.RemoveAt(1);
+        tile.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+        for (int i = 0; i < tile.transform.childCount; i++)
+        {
+            if (tile.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
+                listMaterials = tile.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
+            else
+                continue;
+            if (!(listMaterials.Count < 2))
+                listMaterials.RemoveAt(1);
+            tile.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+        }
+    }
+    public void MultiplyDiselected()
     {
         if (selectedTiles != null)
         {
             foreach (var obj in selectedTiles)
             {
-                obj.GetComponent<ClickLogick>().Diselected();
-                
+                obj.GetComponent<ClickLogick>().Diselected(obj);
             }
             selectedTiles.Clear();
         }
-        if (selectedTile != gameObject)
-        {              
-            if (selectedTile != null)
-            {
-                //OpenBuildMenu(selectedTiles);
-                listMaterials = selectedTile.GetComponent<MeshRenderer>().materials.ToList();
-                if (listMaterials.Count > 1)
-                    listMaterials.RemoveAt(1);
-                selectedTile.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-                for (int i = 0; i < selectedTile.transform.childCount; i++)
-                {
-                    if (selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-                        listMaterials = selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
-                    else
-                        continue;
-                    listMaterials.RemoveAt(1);
-                    selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-                }
-            }
-            
-            meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>().ToList();
-            meshRenderers.Add(gameObject.GetComponent<MeshRenderer>());
-            listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
-            if (!listMaterials.Contains(mat))
-            {
-                listMaterials.Add(mat);
-                if (meshRenderers != null)
-                {
-                    foreach (var item in meshRenderers)
-                    {
-                        item.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-                    }
-                }
-                gameObject.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-            }
-            selectedTile = gameObject;
-            
-        }
-    }
-    public void SelectedMultiply(GameObject unit)
-    {
-        currenUnit = unit;
-        selectedTiles.Add(gameObject);
-        listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            if (gameObject.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-                listMaterials = gameObject.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
-            else
-                continue;
-            gameObject.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-        }
-        meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>().ToList();
-        meshRenderers.Add(gameObject.GetComponent<MeshRenderer>());
-        listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
-        if (!listMaterials.Contains(moveMat))
-        {
-            listMaterials.Add(moveMat);
-            if (meshRenderers != null)
-            {
-                foreach (var item in meshRenderers)
-                {
-                    item.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-                }
-            }
-            gameObject.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-        }
-    }
-    public void Diselected()
-    {
-        if (selectedTile == null)
-        {
-            listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
-            listMaterials.RemoveAt(1);
-            gameObject.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-            for (int i = 0; i < gameObject.transform.childCount; i++)
-            {
-                if (gameObject.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-                    listMaterials = gameObject.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
-                else
-                    continue;
-                listMaterials.RemoveAt(1);
-                gameObject.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-            }
-        }
-        else
-        {
-            listMaterials = selectedTile.GetComponent<MeshRenderer>().materials.ToList();
-            if (listMaterials.Count > 1)
-                listMaterials.RemoveAt(1);
-            selectedTile.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-            for (int i = 0; i < selectedTile.transform.childCount; i++)
-            {
-                if (selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>() != null)
-                    listMaterials =     selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials.ToList();
-                else
-                    continue;
-                listMaterials.RemoveAt(1);
-                selectedTile.transform.GetChild(i).GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
-            }
-        }
-        
     }
 
-    //private void OpenBuildMenu(GameObject selestedTile)
-    //{
-    //    foreach (var entry in buildingEntries)
-    //    {
-    //        entry.button.onClick.RemoveAllListeners();
-    //        entry.button.onClick.AddListener(() => BuildStructure(entry.building, selestedTile));
-    //    }
-    //}
 
     private void BuildStructure(GameObject building, GameObject selectedTile)
     {
@@ -172,6 +99,25 @@ public class ClickLogick : MonoBehaviour
                 currenUnit.transform.position = objects.transform.position + new Vector3(0, 0.5f, 0);
                 currenUnit.transform.parent = objects.transform;
             }
+        }
+    }
+
+    private void PaintingTiles(Material mat)
+    {
+        meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>().ToList();
+        meshRenderers.Add(gameObject.GetComponent<MeshRenderer>());
+        listMaterials = gameObject.GetComponent<MeshRenderer>().materials.ToList();
+        if (!listMaterials.Contains(mat))
+        {
+            listMaterials.Add(mat);
+            if (meshRenderers != null)
+            {
+                foreach (var item in meshRenderers)
+                {
+                    item.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
+                }
+            }
+            gameObject.GetComponent<MeshRenderer>().materials = listMaterials.ToArray();
         }
     }
 }

@@ -39,6 +39,7 @@ public class UnitsScript : MonoBehaviour
     {
         GameObject tileWithUnit = gameObject.transform.parent.gameObject;
         Debug.Log(GlobalContainer.trueAllTiles.Count);
+        tileWithUnit.GetComponent<ClickLogick>().MultiplyDiselected();
         foreach (var tile in GlobalContainer.trueAllTiles)
         {
             float distance = Vector3.Distance(tile.transform.position, tileWithUnit.transform.position);
@@ -47,18 +48,18 @@ public class UnitsScript : MonoBehaviour
                 tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
             }
         }
-        ClickLogick[] clickLogicks = FindObjectsOfType<ClickLogick>();
-        if (clickLogicks.Length > 0)
-        {
-            foreach (var clickLogick in clickLogicks)
-            {
-                clickLogick.Diselected(mat);
-            }
-        }
-        else
-        {
-            Debug.LogError("ClickLogick объекты не найдены в сцене.");
-        }
+        //ClickLogick[] clickLogicks = FindObjectsOfType<ClickLogick>();
+        //if (clickLogicks.Length > 0)
+        //{
+        //    foreach (var clickLogick in clickLogicks)
+        //    {
+        //        clickLogick.Diselected(clickLogick.gameObject);
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.LogError("ClickLogick объекты не найдены в сцене.");
+        //}
     }
 
     public void Build()
