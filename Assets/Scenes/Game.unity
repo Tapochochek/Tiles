@@ -1702,6 +1702,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5583578045876030196, guid: 3fb79694048ba5c48b17e113238baca5, type: 3}
+      propertyPath: mat
+      value: 
+      objectReference: {fileID: 2100000, guid: f9aa956761a7ed244b3820503e8e90d2, type: 2}
+    - target: {fileID: 5583578045876030196, guid: 3fb79694048ba5c48b17e113238baca5, type: 3}
       propertyPath: 'unitActionsButton.Array.data[0]'
       value: 
       objectReference: {fileID: 1486651859}

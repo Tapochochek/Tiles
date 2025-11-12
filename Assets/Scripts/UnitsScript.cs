@@ -8,6 +8,7 @@ public class UnitsScript : MonoBehaviour
 {
     [SerializeField] private List<Button> unitActionsButton;
     private List<UnityAction> unityActions = new List<UnityAction>();
+    [SerializeField] Material mat;
 
     private float walkDistance = GlobalContainer.hexRadius * 2;
 
@@ -46,14 +47,12 @@ public class UnitsScript : MonoBehaviour
                 tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
             }
         }
-        
-
         ClickLogick[] clickLogicks = FindObjectsOfType<ClickLogick>();
         if (clickLogicks.Length > 0)
         {
             foreach (var clickLogick in clickLogicks)
             {
-                clickLogick.Diselected();
+                clickLogick.Diselected(mat);
             }
         }
         else
