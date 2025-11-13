@@ -3,22 +3,37 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class UnitsScript : MonoBehaviour
 {
     [SerializeField] private List<Button> unitActionsButton;
+    [SerializeField] private GameObject buttonBuildPanels;
     private List<UnityAction> unityActions = new List<UnityAction>();
+
+    int wood, stone, metal;
+    public PlayerManagerScript playerManager;
+
+
     [SerializeField] Material mat;
 
     private float walkDistance = GlobalContainer.hexRadius * 2;
 
+    [System.Serializable]
+    public class BuildingEntry
+    {
+        public GameObject building;
+        public Button button;
+    }
+    public List<BuildingEntry> buildingEntries;
+
     void Start()
     {
         unityActions = new List<UnityAction>
-       {
-           UnitMove,
-           Build
-       };
+        {
+            UnitMove,
+            BuildMenuOpen
+        };
 
         for (int i = 0; i < unitActionsButton.Count; i++)
         {
@@ -34,7 +49,6 @@ public class UnitsScript : MonoBehaviour
             }
         }
     }
-
     public void UnitMove()
     {
         GameObject tileWithUnit = gameObject.transform.parent.gameObject;
@@ -48,22 +62,33 @@ public class UnitsScript : MonoBehaviour
                 tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
             }
         }
-        //ClickLogick[] clickLogicks = FindObjectsOfType<ClickLogick>();
-        //if (clickLogicks.Length > 0)
-        //{
-        //    foreach (var clickLogick in clickLogicks)
-        //    {
-        //        clickLogick.Diselected(clickLogick.gameObject);
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.LogError("ClickLogick объекты не найдены в сцене.");
-        //}
     }
 
-    public void Build()
+    public void BuildMenuOpen()
     {
-        Debug.Log("Build");
+        Debug.Log("BuildMenuOpen");
+        buttonBuildPanels.SetActive(true);
+        foreach (var entry in buildingEntries)
+        {
+            Debug.Log("ffff");
+            entry.button.onClick.AddListener(() =>
+            {
+                Build(entry.building);
+            });
+        }
+    }
+    public void Build(GameObject build) {
+
+        playerManager.playerResources.Wood -= 10;
+        Debug.Log("Wood after build: " + playerManager.playerResources.Wood);
+        playerManager.playerResources.Metal -= 10;
+        playerManager.playerResources.Stone -= 10;
+
+        playerManager.SaveResources();
+        playerManager.LoadResources();
+        GameObject tileWithUnit = gameObject.transform.parent.gameObject;
+        GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
+        newBuilding.transform.parent = tileWithUnit.transform;
+        buttonBuildPanels.SetActive(false);
     }
 }

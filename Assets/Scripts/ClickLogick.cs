@@ -17,19 +17,14 @@ public class ClickLogick : MonoBehaviour
     private static GameObject currenUnit;
     private static GameObject selectedTile;
 
-    [System.Serializable]
-    public class BuildingEntry
-    {
-        public GameObject building;
-        public Button button;
-    }
-    public List<BuildingEntry> buildingEntries;
+
 
     private static List<GameObject> selectedTiles = new List<GameObject>();
 
     private void OnMouseOver()
     {
         RightClickOnZone(gameObject);
+        
     }
     // Готовый метод выделения тайла
     private void OnMouseDown()
@@ -80,24 +75,17 @@ public class ClickLogick : MonoBehaviour
             selectedTiles.Clear();
         }
     }
-
-
-    private void BuildStructure(GameObject building, GameObject selectedTile)
-    {
-        if (selectedTiles != null)
-        {            
-            Instantiate(building, selectedTile.transform.position, building.transform.rotation);
-        }
-    }
     private static void RightClickOnZone(GameObject objects)
     {
         if (Input.GetMouseButtonDown(1))
-        {
+        {           
             Debug.Log("RightClick");
             if (selectedTiles != null && selectedTiles.Contains(objects))
             {
                 currenUnit.transform.position = objects.transform.position + new Vector3(0, 0.5f, 0);
                 currenUnit.transform.parent = objects.transform;
+                ClickLogick selectedTileScript = objects.GetComponent<ClickLogick>();
+                selectedTileScript.MultiplyDiselected();
             }
         }
     }
