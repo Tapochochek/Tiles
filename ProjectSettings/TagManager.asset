@@ -9,11 +9,16 @@ TagManager:
   - yes
   - no
   - inVision
+  - Blue
+  - Red
+  - Green
+  - Purple
+  - Unit
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Units
   - Water
   - UI
   - Blue

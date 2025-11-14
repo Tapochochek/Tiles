@@ -13,10 +13,10 @@ public class UnitsScript : MonoBehaviour
 
     int wood, stone, metal;
     public PlayerManagerScript playerManager;
+    private bool isTurn = false;
 
 
     [SerializeField] Material mat;
-
     private float walkDistance = GlobalContainer.hexRadius * 2;
 
     [System.Serializable]
@@ -26,19 +26,17 @@ public class UnitsScript : MonoBehaviour
         public Button button;
     }
     public List<BuildingEntry> buildingEntries;
-
-    void Start()
+    private void OnEnable()
     {
         unityActions = new List<UnityAction>
         {
             UnitMove,
             BuildMenuOpen
         };
-
         for (int i = 0; i < unitActionsButton.Count; i++)
         {
             Debug.Log(i);
-            if (i < unityActions.Count) // ѕроверка, чтобы избежать выхода за пределы массива    
+            if (i < unityActions.Count)
             {
                 int index = i;
                 unitActionsButton[i].onClick.AddListener(() => unityActions[index].Invoke());
@@ -47,6 +45,13 @@ public class UnitsScript : MonoBehaviour
             {
                 Debug.LogError($"»ндекс {i} выходит за пределы списка unityActions.");
             }
+        }
+    }
+    private void OnDisable()
+    {
+        for (int i = 0; i < unitActionsButton.Count; i++)
+        {
+            unitActionsButton[i].onClick.RemoveAllListeners();
         }
     }
     public void UnitMove()
@@ -70,7 +75,7 @@ public class UnitsScript : MonoBehaviour
         buttonBuildPanels.SetActive(true);
         foreach (var entry in buildingEntries)
         {
-            Debug.Log("ffff");
+            entry.button.onClick.RemoveAllListeners();
             entry.button.onClick.AddListener(() =>
             {
                 Build(entry.building);
@@ -79,16 +84,24 @@ public class UnitsScript : MonoBehaviour
     }
     public void Build(GameObject build) {
 
-        playerManager.playerResources.Wood -= 10;
-        Debug.Log("Wood after build: " + playerManager.playerResources.Wood);
-        playerManager.playerResources.Metal -= 10;
-        playerManager.playerResources.Stone -= 10;
+        buttonBuildPanels.SetActive(false);
+        if (playerManager.playerResources.Wood >= 10 && playerManager.playerResources.Metal >= 10 && playerManager.playerResources.Stone >= 10)
+        {
+            playerManager.playerResources.Wood -= 10;
+            playerManager.playerResources.Metal -= 10;
+            playerManager.playerResources.Stone -= 10;
+        }
+        else
+        {
 
+            Debug.Log("Not enough resources to build!");
+            return;
+        }
         playerManager.SaveResources();
         playerManager.LoadResources();
         GameObject tileWithUnit = gameObject.transform.parent.gameObject;
         GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
         newBuilding.transform.parent = tileWithUnit.transform;
-        buttonBuildPanels.SetActive(false);
+        
     }
 }

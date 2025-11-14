@@ -7,24 +7,17 @@ using UnityEngine.UI;
 
 public class ClickLogick : MonoBehaviour
 {
-    private string[] turn = { "blue", "red", "green", "purple" };
-    private static int turnIndex = 0;
-
     public Material mat;
     public Material moveMat;
     private List<Material> listMaterials;
     private List<MeshRenderer> meshRenderers;
     private static GameObject currenUnit;
     private static GameObject selectedTile;
-
-
-
     private static List<GameObject> selectedTiles = new List<GameObject>();
 
     private void OnMouseOver()
     {
-        RightClickOnZone(gameObject);
-        
+        RightClickOnZone(gameObject);       
     }
     // Готовый метод выделения тайла
     private void OnMouseDown()
