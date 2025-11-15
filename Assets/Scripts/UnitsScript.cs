@@ -17,7 +17,8 @@ public class UnitsScript : MonoBehaviour
 
 
     [SerializeField] Material mat;
-    private float walkDistance = GlobalContainer.hexRadius * 2;
+    public int walkPoints = 2;
+    public static float walkDistance = GlobalContainer.hexRadius * 2;
 
     [System.Serializable]
     public class BuildingEntry
@@ -28,6 +29,7 @@ public class UnitsScript : MonoBehaviour
     public List<BuildingEntry> buildingEntries;
     private void OnEnable()
     {
+        walkPoints = 2; 
         unityActions = new List<UnityAction>
         {
             UnitMove,
@@ -56,16 +58,27 @@ public class UnitsScript : MonoBehaviour
     }
     public void UnitMove()
     {
-        GameObject tileWithUnit = gameObject.transform.parent.gameObject;
-        Debug.Log(GlobalContainer.trueAllTiles.Count);
-        tileWithUnit.GetComponent<ClickLogick>().MultiplyDiselected();
-        foreach (var tile in GlobalContainer.trueAllTiles)
+        if(walkPoints > 0)
         {
-            float distance = Vector3.Distance(tile.transform.position, tileWithUnit.transform.position);
-            if (distance <= walkDistance)
+            GameObject tileWithUnit = gameObject.transform.parent.gameObject;
+            Debug.Log(GlobalContainer.trueAllTiles.Count);
+            tileWithUnit.GetComponent<ClickLogick>().MultiplyDiselected();
+            foreach (var tile in GlobalContainer.trueAllTiles)
             {
-                tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
+                float distance = Vector3.Distance(tile.transform.position, tileWithUnit.transform.position);
+                if (distance <= walkDistance && walkPoints >= 2)
+                {
+                    tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
+                }
+                else if (distance <= walkDistance / 2  && walkPoints == 1)
+                {
+                    tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
+                }
             }
+        }
+        else
+        {
+            Debug.Log("No walk points left!");
         }
     }
 
@@ -103,5 +116,9 @@ public class UnitsScript : MonoBehaviour
         GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
         newBuilding.transform.parent = tileWithUnit.transform;
         
+    } 
+    public void PointMovment()
+    {
+        GameObject tileWithUnit = gameObject.transform.parent.gameObject;
     }
 }

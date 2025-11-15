@@ -70,11 +70,24 @@ public class ClickLogick : MonoBehaviour
     }
     private static void RightClickOnZone(GameObject objects)
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && currenUnit.GetComponent<UnitsScript>().walkPoints > 0)
         {           
             Debug.Log("RightClick");
-            if (selectedTiles != null && selectedTiles.Contains(objects))
+            if (selectedTiles != null)
             {
+                float distance = Vector3.Distance(currenUnit.transform.parent.position, objects.transform.position);
+                Debug.Log($"Distance: {distance}");
+                Debug.Log($"WalkPoints before move: {currenUnit.GetComponent<UnitsScript>().walkPoints}");
+                Debug.Log($"WalkDistance: {UnitsScript.walkDistance}");
+                Debug.Log($"WalkPoints: {UnitsScript.walkDistance/2}");
+                if (distance <= UnitsScript.walkDistance && distance >= UnitsScript.walkDistance/2)
+                {                    
+                    currenUnit.GetComponent<UnitsScript>().walkPoints -= 2;
+                }
+                else if(distance <= UnitsScript.walkDistance / 2)
+                {
+                    currenUnit.GetComponent<UnitsScript>().walkPoints -= 1;
+                }
                 currenUnit.transform.position = objects.transform.position + new Vector3(0, 0.5f, 0);
                 currenUnit.transform.parent = objects.transform;
                 ClickLogick selectedTileScript = objects.GetComponent<ClickLogick>();
