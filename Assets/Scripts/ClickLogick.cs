@@ -71,7 +71,7 @@ public class ClickLogick : MonoBehaviour
     private static void RightClickOnZone(GameObject objects)
     {
         if (Input.GetMouseButtonDown(1) && currenUnit.GetComponent<UnitsScript>().walkPoints > 0)
-        {           
+        {         
             Debug.Log("RightClick");
             if (selectedTiles != null)
             {
@@ -92,8 +92,10 @@ public class ClickLogick : MonoBehaviour
                 currenUnit.transform.parent = objects.transform;
                 ClickLogick selectedTileScript = objects.GetComponent<ClickLogick>();
                 selectedTileScript.MultiplyDiselected();
+                currenUnit.GetComponent<UnitsScript>().UnitsScenary();
             }
         }
+        
     }
 
     private void PaintingTiles(Material mat)

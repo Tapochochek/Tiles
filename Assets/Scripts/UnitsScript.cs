@@ -1,14 +1,20 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class UnitsScript : MonoBehaviour
 {
+    [SerializeField] private string unitName;
     [SerializeField] private List<Button> unitActionsButton;
     [SerializeField] private GameObject buttonBuildPanels;
+    [SerializeField] private GameObject unitText;
+    private static GameObject currentActiveUnitUI;
+    [SerializeField] private GameObject characterCanvas;
+    GameObject spawnUnitText;
+    [SerializeField] private Transform content;
     private List<UnityAction> unityActions = new List<UnityAction>();
 
     int wood, stone, metal;
@@ -27,13 +33,22 @@ public class UnitsScript : MonoBehaviour
         public Button button;
     }
     public List<BuildingEntry> buildingEntries;
+
     private void OnEnable()
     {
+        characterCanvas.SetActive(false);      
         walkPoints = 2; 
+        spawnUnitText = Instantiate(unitText, content);
+        unitActionsButton.Add(spawnUnitText.GetComponentInChildren<Button>());
+        
+        Debug.Log($"unitActionsButton: {unitActionsButton.Count}");
+        spawnUnitText.transform.SetParent(content);
+        spawnUnitText.GetComponentInChildren<TextMeshProUGUI>().text = $"{unitName}";
         unityActions = new List<UnityAction>
         {
             UnitMove,
-            BuildMenuOpen
+            BuildMenuOpen,
+            ShowUnitUI
         };
         for (int i = 0; i < unitActionsButton.Count; i++)
         {
@@ -51,6 +66,9 @@ public class UnitsScript : MonoBehaviour
     }
     private void OnDisable()
     {
+        characterCanvas.SetActive(false);
+        unitActionsButton.Remove(spawnUnitText.GetComponentInChildren<Button>());
+        Destroy(spawnUnitText);
         for (int i = 0; i < unitActionsButton.Count; i++)
         {
             unitActionsButton[i].onClick.RemoveAllListeners();
@@ -75,6 +93,7 @@ public class UnitsScript : MonoBehaviour
                     tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
                 }
             }
+            
         }
         else
         {
@@ -115,10 +134,35 @@ public class UnitsScript : MonoBehaviour
         GameObject tileWithUnit = gameObject.transform.parent.gameObject;
         GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
         newBuilding.transform.parent = tileWithUnit.transform;
-        
-    } 
-    public void PointMovment()
-    {
-        GameObject tileWithUnit = gameObject.transform.parent.gameObject;
     }
+
+    public void UnitsScenary()
+    {
+        if (unitName == "Шахтер")
+        {
+            Debug.Log("Checking for mining options...");
+            if (gameObject.transform.parent.Find("Rock(Clone)"))
+            {
+                Debug.Log("Can mine stone here!");
+            }
+        }
+        else if (unitName == "Дровосек")
+        {
+            Debug.Log("Checking for wood chopping options...");
+            if (gameObject.transform.parent.Find("Forest(Clone)"))
+            {
+                Debug.Log("Can chop wood here!");
+            }
+        }
+    }
+    public void ShowUnitUI()
+    {
+        if (currentActiveUnitUI != null && currentActiveUnitUI != characterCanvas)
+        {
+            currentActiveUnitUI.SetActive(false);
+        }
+        characterCanvas.SetActive(!characterCanvas.activeSelf);
+        currentActiveUnitUI = characterCanvas;
+    }
+    
 }

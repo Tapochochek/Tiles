@@ -5,11 +5,17 @@ using UnityEngine;
 public class TurnManagerScript : MonoBehaviour
 {
     private string[] turn = { "Blue", "Red", "Green", "Purple" };
+    private PlayerManagerScript player;
     private static int turnIndex;
+    public static string currentTurn;
+    private bool isFirstRound;
 
     private void Start()
     {
+        isFirstRound = true;
+        player = GameObject.FindAnyObjectByType<PlayerManagerScript>();
         turnIndex = 0; //Random.Range(0,turn.Length);
+        currentTurn = turn[turnIndex];
         UnitControls();
     }
 
@@ -32,12 +38,25 @@ public class TurnManagerScript : MonoBehaviour
 
     public void NextTurn()
     {
+        player.SaveResources();
         turnIndex++;
         if (turnIndex >= turn.Length)
         {
             turnIndex = 0;
+            isFirstRound = false;
+
         }
         Debug.Log("Current turn: " + turn[turnIndex]);
         UnitControls();
+        currentTurn = turn[turnIndex];
+
+        if (isFirstRound)
+        {
+            player.SetStartResourceValues();
+        }
+        else
+        { 
+            player.LoadResources();
+        }
     }
 }
