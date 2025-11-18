@@ -67,7 +67,10 @@ public class GlobalContainer : MonoBehaviour
                     tile.GetComponent<Renderer>().material = materials[i];
                     GameObject fort = Instantiate(fortrest, tile.transform.position, fortrest.transform.rotation);
                     fort.GetComponent<Renderer>().material = materials[i];
-                    
+                    fort.layer = LayerMask.NameToLayer(materials[i].name);
+                    fort.tag = "Building";
+                    fort.name = "Fortress";
+
                     foreach (var singletile in allTiles)
                     {                         
                         float distance = Vector3.Distance(tile.transform.position, singletile.transform.position);

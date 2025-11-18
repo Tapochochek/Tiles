@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class UnitsScript : MonoBehaviour
     [SerializeField] private GameObject unitText;
     private static GameObject currentActiveUnitUI;
     [SerializeField] private GameObject characterCanvas;
+
+    private bool isOnResourceTile = false;
     GameObject spawnUnitText;
     [SerializeField] private Transform content;
     private List<UnityAction> unityActions = new List<UnityAction>();
@@ -36,6 +39,7 @@ public class UnitsScript : MonoBehaviour
 
     private void OnEnable()
     {
+        StartCoroutine(AddResources());
         characterCanvas.SetActive(false);      
         walkPoints = 2; 
         spawnUnitText = Instantiate(unitText, content);
@@ -63,7 +67,9 @@ public class UnitsScript : MonoBehaviour
                 Debug.LogError($"Индекс {i} выходит за пределы списка unityActions.");
             }
         }
+        
     }
+    
     private void OnDisable()
     {
         characterCanvas.SetActive(false);
@@ -143,7 +149,12 @@ public class UnitsScript : MonoBehaviour
             Debug.Log("Checking for mining options...");
             if (gameObject.transform.parent.Find("Rock(Clone)"))
             {
+                isOnResourceTile = true;
                 Debug.Log("Can mine stone here!");
+            }
+            else
+            {
+                isOnResourceTile = false;
             }
         }
         else if (unitName == "Дровосек")
@@ -151,7 +162,12 @@ public class UnitsScript : MonoBehaviour
             Debug.Log("Checking for wood chopping options...");
             if (gameObject.transform.parent.Find("Forest(Clone)"))
             {
+                isOnResourceTile = true;
                 Debug.Log("Can chop wood here!");
+            }
+            else
+            {
+                isOnResourceTile = false;
             }
         }
     }
@@ -164,5 +180,19 @@ public class UnitsScript : MonoBehaviour
         characterCanvas.SetActive(!characterCanvas.activeSelf);
         currentActiveUnitUI = characterCanvas;
     }
-    
+    private IEnumerator AddResources()
+    {
+        yield return new WaitForSeconds(0.001f);
+        if (isOnResourceTile && unitName == "Шахтер")
+        {
+            Debug.Log("Сработало");
+            playerManager.AddResources(10, "Stone");
+        }
+        else if (isOnResourceTile && unitName == "Дровосек")
+        {
+            Debug.Log("Сработало");
+            playerManager.AddResources(10, "Wood");
+        }
+    }
+
 }

@@ -17,6 +17,7 @@ public class TurnManagerScript : MonoBehaviour
         turnIndex = 0; //Random.Range(0,turn.Length);
         currentTurn = turn[turnIndex];
         UnitControls();
+        BuildingControls();
     }
 
     public void UnitControls()
@@ -35,6 +36,27 @@ public class TurnManagerScript : MonoBehaviour
             }
         }
     }
+    public void BuildingControls()
+    {
+        List<GameObject> allBuildings = GameObject.FindGameObjectsWithTag("Building").ToList();
+        List<GameObject> currentTurnBuildings = new List<GameObject>();
+        foreach (GameObject building in allBuildings)
+        {
+            if (building.layer == LayerMask.NameToLayer(turn[turnIndex]))
+            {
+                currentTurnBuildings.Add(building);
+                Debug.Log(building.name);
+            }
+        }
+
+        foreach (GameObject building in currentTurnBuildings)
+        {
+            if(building.name == "Fortress")
+            {
+                Debug.Log("Есть такое дело");
+            }
+        }
+    }
 
     public void NextTurn()
     {
@@ -48,6 +70,7 @@ public class TurnManagerScript : MonoBehaviour
         }
         Debug.Log("Current turn: " + turn[turnIndex]);
         UnitControls();
+        BuildingControls();
         currentTurn = turn[turnIndex];
 
         if (isFirstRound)
