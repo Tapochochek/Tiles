@@ -86,6 +86,7 @@ public class GlobalContainer : MonoBehaviour
                         if (distance <= hexRadius)
                         {                           
                             singletile.GetComponent<Renderer>().material = materials[i];
+                            singletile.layer = LayerMask.NameToLayer(materials[i].name);
                             bannedTiles.Add(singletile);
                         }
                     }
@@ -113,7 +114,11 @@ public class GlobalContainer : MonoBehaviour
             completed = true;
             
         }
-        
+        foreach (var tile in trueAllTiles)
+        {
+            tile.tag = "Tile";
+        }
+
     }
 
     /// <summary>

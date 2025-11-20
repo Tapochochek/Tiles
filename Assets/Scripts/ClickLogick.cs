@@ -22,14 +22,24 @@ public class ClickLogick : MonoBehaviour
     // Готовый метод выделения тайла
     private void OnMouseDown()
     {
+        
         //Проверка если ни одни тайл не выделен
         if (selectedTile != null)
+        {
             Diselected(selectedTile);
+        }
+            
         //Снятие выделения со всех выделенных тайлов
         MultiplyDiselected();
         //Выделение текущего тайла
         PaintingTiles(mat);
+
+        
         selectedTile = gameObject;
+        if (selectedTile.GetComponentInChildren<PeopleManageScript>())
+        {
+            StartCoroutine(selectedTile.GetComponentInChildren<PeopleManageScript>().ShowFortressUI());
+        }
     }
 
     public void SelectedMultiply(GameObject unit)

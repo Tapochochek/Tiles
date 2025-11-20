@@ -10,7 +10,6 @@ public class PlayerManagerScript : MonoBehaviour
         public int Wood { get; set; }
         public int Stone { get; set; }
         public int Metal { get; set; }
-        public int People { get; set; }
     }
     public PlayerResources playerResources;
 
@@ -53,7 +52,6 @@ public class PlayerManagerScript : MonoBehaviour
             resources[0].text = playerResources.Wood.ToString();
             resources[1].text = playerResources.Stone.ToString();
             resources[2].text = playerResources.Metal.ToString();
-            resources[3].text = playerResources.People.ToString();
         }
         else
         {
@@ -64,7 +62,7 @@ public class PlayerManagerScript : MonoBehaviour
     {
         if (resource == "Wood")
         {
-            playerResources.Wood += resources;          
+            playerResources.Wood += resources;
         }
         else if (resource == "Stone")
         {
@@ -77,14 +75,8 @@ public class PlayerManagerScript : MonoBehaviour
         SaveResources();
         LoadResources();
     }
-    public void AddPeopls(int countAdd)
+    public void ButtonUnitsClick()
     {
-        playerResources.People += countAdd;
-
-        SaveResources();
-        LoadResources();
-    }
-    public void ButtonUnitsClick() { 
         unitList.SetActive(!unitList.activeSelf);
     }
 }

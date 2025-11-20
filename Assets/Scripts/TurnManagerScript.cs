@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class TurnManagerScript : MonoBehaviour
@@ -10,7 +11,7 @@ public class TurnManagerScript : MonoBehaviour
     public static string currentTurn;
     private bool isFirstRound;
 
-    private void Start()
+    private void Awake()
     {
         isFirstRound = true;
         player = GameObject.FindAnyObjectByType<PlayerManagerScript>();
@@ -53,7 +54,7 @@ public class TurnManagerScript : MonoBehaviour
         {
             if(building.name == "Fortress")
             {
-                Debug.Log("Есть такое дело");
+                building.GetComponent<PeopleManageScript>().AddPeople(1);
             }
         }
     }
@@ -70,7 +71,7 @@ public class TurnManagerScript : MonoBehaviour
         }
         Debug.Log("Current turn: " + turn[turnIndex]);
         UnitControls();
-        BuildingControls();
+        
         currentTurn = turn[turnIndex];
 
         if (isFirstRound)
@@ -78,7 +79,8 @@ public class TurnManagerScript : MonoBehaviour
             player.SetStartResourceValues();
         }
         else
-        { 
+        {
+            BuildingControls();
             player.LoadResources();
         }
     }
