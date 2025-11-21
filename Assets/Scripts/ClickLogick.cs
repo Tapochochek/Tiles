@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class ClickLogick : MonoBehaviour
 {
     public Material mat;
     public Material moveMat;
+    public GameObject peopleCountPrefab;
     private List<Material> listMaterials;
     private List<MeshRenderer> meshRenderers;
     private static GameObject currenUnit;
@@ -115,19 +117,36 @@ public class ClickLogick : MonoBehaviour
             }
             if (selectedTile != null && selectedTile.GetComponentInChildren<PeopleManageScript>() && selectedTiles.Contains(objects))
             {
+                
                 Debug.Log(selectedTile.name);
+
                 int countPeople = Convert.ToInt32(selectedTile.transform.Find("Fortress").GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text);
+
+                PeopleManageScript peopleManage = selectedTile.GetComponentInChildren<PeopleManageScript>();
+                peopleManage.fortressPeople.People = countPeople;
+
+                ClickLogick selectedTileScript = objects.GetComponent<ClickLogick>();
+
                 if (countPeople > 0)
                 {
-                    ClickLogick selectedTileScript = objects.GetComponent<ClickLogick>();
+                    if (objects.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
+                    {
+                        GameObject peopleCountTextTiles = Instantiate(selectedTileScript.peopleCountPrefab, objects.transform);
+                        peopleCountTextTiles.GetComponentInChildren<TextMeshProUGUI>().text = countPeople.ToString();
+                        countPeople = 0;
+                    }
+                    else
+                    {
+                        objects.GetComponent<Renderer>().material = selectedTile.GetComponent<Renderer>().material;
+                        objects.layer = LayerMask.NameToLayer(TurnManagerScript.currentTurn);
+                        countPeople--;
+                    }
+                    
                     selectedTileScript.MultiplyDiselected();
-                    objects.GetComponent<Renderer>().material = selectedTile.GetComponent<Renderer>().material;
-                    objects.layer = LayerMask.NameToLayer(TurnManagerScript.currentTurn);
-                    countPeople--;
-                    PeopleManageScript peopleManage = selectedTile.GetComponentInChildren<PeopleManageScript>();
-                    peopleManage.fortressPeople.People = countPeople;
+                                                          
                     peopleManage.SaveResources();
                     selectedTile.transform.Find("Fortress").GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = $"{countPeople}";
+                    
                 }
 
             }

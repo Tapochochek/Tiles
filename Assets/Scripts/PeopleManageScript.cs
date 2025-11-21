@@ -27,10 +27,10 @@ public class PeopleManageScript : MonoBehaviour
             peopleCountText = GetComponentInChildren<TextMeshProUGUI>();
             fortressPeople.People = 1;
             fortressId = System.Guid.NewGuid().ToString();
-            
+
             SaveResources();
             LoadResources();
-        }   
+        }
     }
     public void SaveResources()
     {
@@ -64,13 +64,14 @@ public class PeopleManageScript : MonoBehaviour
         peopleCountText.text = fortressPeople.People.ToString();
         SaveResources();
     }
-    
+
     public IEnumerator ShowFortressUI()
     {
         ClickLogick.isFortressUI = true;
         Canvas canvas = GameObject.Find("FortressUI").GetComponentInChildren<Canvas>();
         canvas.enabled = true;
         canvas.transform.Find("Attack").GetComponent<Button>().onClick.AddListener(PaintAttackRadius);
+        canvas.transform.Find("Defend").GetComponent<Button>().onClick.AddListener(PaintDefendsRadius);
         while (true)
         {
             if (Input.GetKey(KeyCode.Escape))
@@ -115,5 +116,22 @@ public class PeopleManageScript : MonoBehaviour
         }
         HideFortressUI();
     }
-
+    private void PaintDefendsRadius()
+    {
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+        List<GameObject> currentPlayerTiles = new List<GameObject>();
+        selectedFortress = this.gameObject;
+        foreach (var obj in allObjects)
+        {
+            if (obj.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn) && obj.tag == "Tile")
+            {
+                currentPlayerTiles.Add(obj);
+            }
+        }
+        foreach (var tile in currentPlayerTiles)
+        {
+            tile.GetComponent<ClickLogick>().SelectedMultiply(tile);
+        }
+        HideFortressUI();
+    }
 }

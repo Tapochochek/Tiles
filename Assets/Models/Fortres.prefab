@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: 5262388794655697791}
   - component: {fileID: 5210800906366460781}
   m_Layer: 0
-  m_Name: Defends
+  m_Name: Defend
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
