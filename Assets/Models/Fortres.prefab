@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 351410346408151667}
   - component: {fileID: 4718131133264912250}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: CanvasPeopleCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 7029346763873030092}
   - component: {fileID: 1138782404437202497}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: PeopleCountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 6796498080742053143}
   - component: {fileID: 1637442931290752948}
   m_Layer: 0
-  m_Name: Image
+  m_Name: PeopleCountIcons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

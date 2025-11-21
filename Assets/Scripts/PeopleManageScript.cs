@@ -15,7 +15,7 @@ public class PeopleManageScript : MonoBehaviour
         public int People { get; set; }
     }
     public FortressPeople fortressPeople;
-
+    public static GameObject selectedFortress;
     private string fortressId;
     TextMeshProUGUI peopleCountText;
 
@@ -57,6 +57,7 @@ public class PeopleManageScript : MonoBehaviour
             Debug.LogError("Player resources file not found!");
         }
     }
+
     public void AddPeople(int amount)
     {
         fortressPeople.People += amount;
@@ -66,6 +67,7 @@ public class PeopleManageScript : MonoBehaviour
     
     public IEnumerator ShowFortressUI()
     {
+        ClickLogick.isFortressUI = true;
         Canvas canvas = GameObject.Find("FortressUI").GetComponentInChildren<Canvas>();
         canvas.enabled = true;
         canvas.transform.Find("Attack").GetComponent<Button>().onClick.AddListener(PaintAttackRadius);
@@ -77,6 +79,7 @@ public class PeopleManageScript : MonoBehaviour
             }
             yield return null;
         }
+        ClickLogick.isFortressUI = false;
         canvas.enabled = false;
           
     }
@@ -84,6 +87,7 @@ public class PeopleManageScript : MonoBehaviour
     {
         GameObject[] allObjects = FindObjectsOfType<GameObject>();
         List<GameObject> attackZone = new List<GameObject>();
+        selectedFortress = this.gameObject;
 
         foreach (var obj in allObjects)
         {
