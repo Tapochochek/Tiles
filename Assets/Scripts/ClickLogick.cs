@@ -42,7 +42,7 @@ public class ClickLogick : MonoBehaviour
 
         
         selectedTile = gameObject;
-        if (selectedTile.GetComponentInChildren<PeopleManageScript>())
+        if (selectedTile.GetComponentInChildren<PeopleManageScript>() && selectedTile.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
         {
             StartCoroutine(selectedTile.GetComponentInChildren<PeopleManageScript>().ShowFortressUI());
         }
@@ -124,6 +124,9 @@ public class ClickLogick : MonoBehaviour
                     objects.GetComponent<Renderer>().material = selectedTile.GetComponent<Renderer>().material;
                     objects.layer = LayerMask.NameToLayer(TurnManagerScript.currentTurn);
                     countPeople--;
+                    PeopleManageScript peopleManage = selectedTile.GetComponentInChildren<PeopleManageScript>();
+                    peopleManage.fortressPeople.People = countPeople;
+                    peopleManage.SaveResources();
                     selectedTile.transform.Find("Fortress").GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = $"{countPeople}";
                 }
 

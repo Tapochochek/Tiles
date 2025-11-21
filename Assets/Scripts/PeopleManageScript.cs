@@ -79,10 +79,16 @@ public class PeopleManageScript : MonoBehaviour
             }
             yield return null;
         }
-        ClickLogick.isFortressUI = false;
-        canvas.enabled = false;
-          
+        HideFortressUI();
+
     }
+    public void HideFortressUI()
+    {
+        ClickLogick.isFortressUI = false;
+        Canvas canvas = GameObject.Find("FortressUI").GetComponentInChildren<Canvas>();
+        canvas.enabled = false;
+    }
+
     private void PaintAttackRadius()
     {
         GameObject[] allObjects = FindObjectsOfType<GameObject>();
@@ -107,6 +113,7 @@ public class PeopleManageScript : MonoBehaviour
                 }
             }
         }
+        HideFortressUI();
     }
 
 }
