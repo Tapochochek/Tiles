@@ -50,11 +50,18 @@ public class TurnManagerScript : MonoBehaviour
             }
         }
 
-        foreach (GameObject building in currentTurnBuildings)
+        foreach (GameObject fort in currentTurnBuildings)
         {
-            if(building.name == "Fortress")
+            if(fort.name == "Fortress")
             {
-                building.GetComponent<PeopleManageScript>().AddPeople(1);
+                fort.GetComponent<PeopleManageScript>().AddPeople(1);
+            }
+        }
+        foreach (GameObject farm in currentTurnBuildings)
+        {
+            if (farm.name == "Farm")
+            {
+                player.playerResources.Food += 5;
             }
         }
     }

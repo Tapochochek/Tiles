@@ -122,24 +122,30 @@ public class UnitsScript : MonoBehaviour
     }
     public void Build(GameObject build) {
 
-        buttonBuildPanels.SetActive(false);
-        if (playerManager.playerResources.Wood >= 10 && playerManager.playerResources.Metal >= 10 && playerManager.playerResources.Stone >= 10)
+        if(gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn) && !gameObject.transform.parent.gameObject.GetComponentInChildren<BuildFunctional>())
         {
-            playerManager.playerResources.Wood -= 10;
-            playerManager.playerResources.Metal -= 10;
-            playerManager.playerResources.Stone -= 10;
+            buttonBuildPanels.SetActive(false);
+            if (playerManager.playerResources.Wood >= 10 && playerManager.playerResources.Stone >= 10)
+            {
+                playerManager.playerResources.Wood -= 10;
+                playerManager.playerResources.Stone -= 10;
+            }
+            else
+            {
+                Debug.Log("Not enough resources to build!");
+                return;
+            }
+            playerManager.SaveResources();
+            playerManager.LoadResources();
+            GameObject tileWithUnit = gameObject.transform.parent.gameObject;
+            GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
+            newBuilding.transform.parent = tileWithUnit.transform;
         }
         else
         {
-
-            Debug.Log("Not enough resources to build!");
-            return;
+            Debug.Log("It's not your territory!");
         }
-        playerManager.SaveResources();
-        playerManager.LoadResources();
-        GameObject tileWithUnit = gameObject.transform.parent.gameObject;
-        GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
-        newBuilding.transform.parent = tileWithUnit.transform;
+        
     }
 
     public void UnitsScenary()

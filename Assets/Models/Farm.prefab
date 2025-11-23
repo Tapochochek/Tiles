@@ -50,10 +50,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6cfc4f696b7dac7438b6df033ecbfe5f, type: 3}
       propertyPath: m_Name
-      value: Ferma
+      value: Farm
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6cfc4f696b7dac7438b6df033ecbfe5f, type: 3}
+      propertyPath: m_TagString
+      value: Building
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6cfc4f696b7dac7438b6df033ecbfe5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7398951816394566680}
   m_SourcePrefab: {fileID: 100100000, guid: 6cfc4f696b7dac7438b6df033ecbfe5f, type: 3}
+--- !u!1 &7694283781252175349 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6cfc4f696b7dac7438b6df033ecbfe5f, type: 3}
+  m_PrefabInstance: {fileID: 7351844387797133476}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7398951816394566680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7694283781252175349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c5bcfa786f6af24492df0ce28b7f1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

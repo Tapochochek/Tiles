@@ -12,14 +12,20 @@ public class ClickLogick : MonoBehaviour
 {
     public Material mat;
     public Material moveMat;
+    private static Material defaultMaterial;
     public GameObject peopleCountPrefab;
     private List<Material> listMaterials;
     private List<MeshRenderer> meshRenderers;
     private static GameObject currenUnit;
     private static GameObject selectedTile;
+    
     private static List<GameObject> selectedTiles = new List<GameObject>();
     public static bool isFortressUI = false;
 
+    private void Start()
+    {
+        defaultMaterial = GetComponent<Renderer>().material;
+    }
     private void OnMouseOver()
     {
         RightClickOnZone(gameObject);       
@@ -131,14 +137,29 @@ public class ClickLogick : MonoBehaviour
                 {
                     if (objects.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
                     {
-                        GameObject peopleCountTextTiles = Instantiate(selectedTileScript.peopleCountPrefab, objects.transform);
-                        peopleCountTextTiles.GetComponentInChildren<TextMeshProUGUI>().text = countPeople.ToString();
+                        GameObject peopleCountTextTiles = null;
+                        if (!selectedTileScript.GetComponentInChildren<TextMeshProUGUI>())
+                        {
+                            peopleCountTextTiles = Instantiate(selectedTileScript.peopleCountPrefab, objects.transform);
+                            peopleCountTextTiles.GetComponentInChildren<TextMeshProUGUI>().text = countPeople.ToString();
+                        }
+                        else
+                        {
+                            peopleCountTextTiles = selectedTileScript.GetComponentInChildren<TextMeshProUGUI>().gameObject;
+                            peopleCountTextTiles.GetComponentInChildren<TextMeshProUGUI>().text = (Convert.ToInt32(peopleCountTextTiles.GetComponentInChildren<TextMeshProUGUI>().text) + countPeople).ToString();
+                        }                       
                         countPeople = 0;
                     }
-                    else
+                    else if (objects.layer == LayerMask.NameToLayer("Gray"))
                     {
                         objects.GetComponent<Renderer>().material = selectedTile.GetComponent<Renderer>().material;
                         objects.layer = LayerMask.NameToLayer(TurnManagerScript.currentTurn);
+                        countPeople--;
+                    }
+                    else
+                    {
+                        objects.GetComponent<Renderer>().material = defaultMaterial;
+                        objects.layer = LayerMask.NameToLayer("Gray");
                         countPeople--;
                     }
                     

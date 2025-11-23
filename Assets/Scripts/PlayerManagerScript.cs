@@ -10,6 +10,7 @@ public class PlayerManagerScript : MonoBehaviour
         public int Wood { get; set; }
         public int Stone { get; set; }
         public int Metal { get; set; }
+        public int Food { get; set; }
     }
     public PlayerResources playerResources;
 
@@ -22,6 +23,7 @@ public class PlayerManagerScript : MonoBehaviour
         playerResources.Wood = 0;
         playerResources.Stone = 0;
         playerResources.Metal = 0;
+        playerResources.Food = 10;
 
         SaveResources();
         LoadResources();
@@ -32,6 +34,8 @@ public class PlayerManagerScript : MonoBehaviour
         playerResources.Wood = 0;
         playerResources.Stone = 0;
         playerResources.Metal = 0;
+        playerResources.Food = 10;
+
         SaveResources();
         LoadResources();
     }
@@ -52,6 +56,7 @@ public class PlayerManagerScript : MonoBehaviour
             resources[0].text = playerResources.Wood.ToString();
             resources[1].text = playerResources.Stone.ToString();
             resources[2].text = playerResources.Metal.ToString();
+            resources[3].text = playerResources.Food.ToString();
         }
         else
         {
@@ -71,6 +76,10 @@ public class PlayerManagerScript : MonoBehaviour
         else if (resource == "Metal")
         {
             playerResources.Metal += resources;
+        }
+        else if (resource == "Food")
+        {
+            playerResources.Food += resources;
         }
         SaveResources();
         LoadResources();
