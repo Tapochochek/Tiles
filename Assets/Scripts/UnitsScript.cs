@@ -6,18 +6,24 @@ using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
+
+
 public class UnitsScript : MonoBehaviour
 {
-    [SerializeField] private string unitName;
+    public enum UnitType
+    {
+        Builder,
+        Lumberjack,
+        Miner
+    }
+    UnitType unitType;
+
     [SerializeField] private List<Button> unitActionsButton;
     [SerializeField] private GameObject buttonBuildPanels;
-    [SerializeField] private GameObject unitText;
     private static GameObject currentActiveUnitUI;
     [SerializeField] private GameObject characterCanvas;
 
     private bool isOnResourceTile = false;
-    GameObject spawnUnitText;
-    [SerializeField] private Transform content;
     private List<UnityAction> unityActions = new List<UnityAction>();
 
     int wood, stone, metal;
@@ -37,23 +43,55 @@ public class UnitsScript : MonoBehaviour
     }
     public List<BuildingEntry> buildingEntries;
 
+
+    private void Awake()
+    {
+        playerManager = GameObject.FindAnyObjectByType<PlayerManagerScript>();
+        if (gameObject.name == "Builder(Clone)")
+        {
+            Debug.Log("Builder found");
+            unitType = UnitType.Builder;
+        }
+        else if (gameObject.name == "Lumberjack(Clone)")
+        {
+            Debug.Log("Lumberjack found");
+            unitType = UnitType.Lumberjack;
+        }
+        else if (gameObject.name == "Miner(Clone)")
+        {
+            Debug.Log("Miner found");
+            unitType = UnitType.Miner;
+        }
+    }
     private void OnEnable()
     {
         StartCoroutine(AddResources());
         characterCanvas.SetActive(false);      
-        walkPoints = 2; 
-        spawnUnitText = Instantiate(unitText, content);
-        unitActionsButton.Add(spawnUnitText.GetComponentInChildren<Button>());
-        
-        Debug.Log($"unitActionsButton: {unitActionsButton.Count}");
-        spawnUnitText.transform.SetParent(content);
-        spawnUnitText.GetComponentInChildren<TextMeshProUGUI>().text = $"{unitName}";
-        unityActions = new List<UnityAction>
+        walkPoints = 2;
+        unitActionsButton.Add(gameObject.transform.Find("Canvas").Find("ActivateButton").GetComponent<Button>());
+        foreach(var button in unitActionsButton)
         {
-            UnitMove,
-            BuildMenuOpen,
-            ShowUnitUI
-        };
+            Debug.Log(button.name);
+        }
+        if (unitType == UnitType.Builder)
+        {
+            unityActions = new List<UnityAction>
+            {
+                UnitMove,
+                BuildMenuOpen,
+                ShowUnitUI
+            };
+            
+        }
+        else
+        {
+            Debug.Log("работает нахуй");
+            unityActions = new List<UnityAction>
+            {
+                UnitMove,
+                ShowUnitUI
+            };
+        }
         for (int i = 0; i < unitActionsButton.Count; i++)
         {
             Debug.Log(i);
@@ -73,8 +111,6 @@ public class UnitsScript : MonoBehaviour
     private void OnDisable()
     {
         characterCanvas.SetActive(false);
-        unitActionsButton.Remove(spawnUnitText.GetComponentInChildren<Button>());
-        Destroy(spawnUnitText);
         for (int i = 0; i < unitActionsButton.Count; i++)
         {
             unitActionsButton[i].onClick.RemoveAllListeners();
@@ -150,7 +186,7 @@ public class UnitsScript : MonoBehaviour
 
     public void UnitsScenary()
     {
-        if (unitName == "Шахтер")
+        if (unitType == UnitType.Miner)
         {
             Debug.Log("Checking for mining options...");
             if (gameObject.transform.parent.Find("Rock(Clone)"))
@@ -163,7 +199,7 @@ public class UnitsScript : MonoBehaviour
                 isOnResourceTile = false;
             }
         }
-        else if (unitName == "Дровосек")
+        else if (unitType == UnitType.Lumberjack)
         {
             Debug.Log("Checking for wood chopping options...");
             if (gameObject.transform.parent.Find("Forest(Clone)"))
@@ -189,14 +225,12 @@ public class UnitsScript : MonoBehaviour
     private IEnumerator AddResources()
     {
         yield return new WaitForSeconds(0.001f);
-        if (isOnResourceTile && unitName == "Шахтер")
+        if (isOnResourceTile && unitType == UnitType.Miner)
         {
-            Debug.Log("Сработало");
             playerManager.AddResources(10, "Stone");
         }
-        else if (isOnResourceTile && unitName == "Дровосек")
+        else if (isOnResourceTile && unitType == UnitType.Lumberjack)
         {
-            Debug.Log("Сработало");
             playerManager.AddResources(10, "Wood");
         }
     }

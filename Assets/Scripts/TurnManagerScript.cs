@@ -11,14 +11,19 @@ public class TurnManagerScript : MonoBehaviour
     public static string currentTurn;
     private bool isFirstRound;
 
-    private void Awake()
+    public void Awake()
     {
         isFirstRound = true;
         player = GameObject.FindAnyObjectByType<PlayerManagerScript>();
         turnIndex = 0; //Random.Range(0,turn.Length);
         currentTurn = turn[turnIndex];
-        UnitControls();
         BuildingControls();
+
+    }
+    public void Starting()
+    {
+        UnitControls();
+
     }
 
     public void UnitControls()
@@ -29,10 +34,12 @@ public class TurnManagerScript : MonoBehaviour
         {
             if (unit.layer != LayerMask.NameToLayer(turn[turnIndex]))
             {
+                Debug.Log("Disabling unit: " + unit.name);
                 unit.GetComponent<UnitsScript>().enabled = false;
             }
             else
             {
+                Debug.Log("Enabling unit: " + unit.name);
                 unit.GetComponent<UnitsScript>().enabled = true;
             }
         }

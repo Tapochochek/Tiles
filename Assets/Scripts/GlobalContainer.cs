@@ -12,6 +12,10 @@ using UnityEngine.UI;
 /// </summary>
 public class GlobalContainer : MonoBehaviour
 {
+    private TurnManagerScript turnManager;
+
+    [SerializeField]
+    private GameObject[] startUnit;
     //¬нутринние переменные дл€ работы скрипта
     public static int MaxMapSize = 300;   
     public static bool firstStep = true;
@@ -48,6 +52,7 @@ public class GlobalContainer : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        turnManager = GameObject.FindAnyObjectByType<TurnManagerScript>();
         usedMaterials = materials;
         radiusSpawn = hexRadius * 2;
     }
@@ -62,6 +67,7 @@ public class GlobalContainer : MonoBehaviour
             {
                 int rand = Random.Range(0, allTiles.Count);
                 GameObject tile = allTiles[rand];
+                List<GameObject> singletiles = new List<GameObject>();
                 if (!tile.CompareTag("no"))
                 {
                     tile.GetComponent<Renderer>().material = materials[i];
@@ -87,9 +93,18 @@ public class GlobalContainer : MonoBehaviour
                         {                           
                             singletile.GetComponent<Renderer>().material = materials[i];
                             singletile.layer = LayerMask.NameToLayer(materials[i].name);
+                            singletiles.Add(singletile);
                             bannedTiles.Add(singletile);
                         }
                     }
+                    for (int j = 0; j< startUnit.Length; j++)
+                    {
+                        GameObject unitInst = Instantiate(startUnit[j], singletiles[j].transform.position, startUnit[j].transform.rotation);
+                        unitInst.name = startUnit[j].name;
+                        unitInst.layer = LayerMask.NameToLayer(materials[i].name);
+                        unitInst.transform.SetParent(singletiles[j].transform);
+                    }
+                    singletiles.Clear();
                     fort.transform.SetParent(tile.transform);
                     allTiles.Remove(tile);
                     i++;
@@ -105,20 +120,20 @@ public class GlobalContainer : MonoBehaviour
                 allTiles.Remove(bannedTile);
             }
             bannedTiles.Clear();
-
             //ѕока что дл€ тестов по двадцадке каждого это потом балансить надо когда пойму на сколько ресы ценные, надо делать их расходными
             ResourcesSpawn(20, 20);
                        
             Debug.Log(allTiles.Count);
             StartGameManager.SetActive(true);
             completed = true;
-            
+            turnManager.Starting();
+
         }
         foreach (var tile in trueAllTiles)
         {
             tile.tag = "Tile";
         }
-
+        
     }
 
     /// <summary>
