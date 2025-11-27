@@ -7,15 +7,25 @@ public class BuildFunctional : MonoBehaviour
     {
         playerManagerScript = GameObject.Find("PlayerManager").GetComponent<PlayerManagerScript>();
     }
-    private void OnEnable()
+    public void Farm()
     {
-        playerManagerScript.LoadResources();
-        if(gameObject.name == "Farm")
+        if(gameObject.name == "Farm(Clone)")
         {
             playerManagerScript.playerResources.Food += 5;
-            playerManagerScript.SaveResources();
-            playerManagerScript.LoadResources();
+            playerManagerScript.UpdateUI();
         }
+            
+
+    }
+
+    public void Fort()
+    {
+        if (gameObject.name == "Fortress")
+            gameObject.GetComponentInParent<PeopleManageScript>().AddPeople(1);
+    }
+
+    public void Village()
+    {
 
     }
 

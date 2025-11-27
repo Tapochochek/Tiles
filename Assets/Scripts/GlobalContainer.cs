@@ -36,8 +36,6 @@ public class GlobalContainer : MonoBehaviour
 
     public GameObject fortrest;
 
-    [SerializeField] private GameObject StartGameManager;
-
     //Массив для ресурсов (на память 0 - камень, 1 - дерево)
     [SerializeField] private GameObject[] resources;
     
@@ -58,10 +56,10 @@ public class GlobalContainer : MonoBehaviour
     }
 
     private void Update()
-    {
-        
+    {       
         if (MaxMapSize<=0 && !completed)
         {
+            
             int i = 0;
             while(i< materials.Count)
             {
@@ -97,7 +95,7 @@ public class GlobalContainer : MonoBehaviour
                             bannedTiles.Add(singletile);
                         }
                     }
-                    for (int j = 0; j< startUnit.Length; j++)
+                    for (int j = 0; j < startUnit.Length; j++)
                     {
                         GameObject unitInst = Instantiate(startUnit[j], singletiles[j].transform.position, startUnit[j].transform.rotation);
                         unitInst.name = startUnit[j].name;
@@ -114,6 +112,7 @@ public class GlobalContainer : MonoBehaviour
                     Debug.Log($"Место не крутое {tile.name}, цвет {materials[i].name}");
                 }
             }
+
             //Перебираем забаненные тайлы и удаляем их из всех тайлов
             foreach (var bannedTile in bannedTiles)
             {
@@ -124,7 +123,6 @@ public class GlobalContainer : MonoBehaviour
             ResourcesSpawn(20, 20);
                        
             Debug.Log(allTiles.Count);
-            StartGameManager.SetActive(true);
             completed = true;
             turnManager.Starting();
 

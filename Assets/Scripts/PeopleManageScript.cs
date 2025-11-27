@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UI;
 using static PlayerManagerScript;
@@ -15,12 +16,19 @@ public class PeopleManageScript : MonoBehaviour
         public int People { get; set; }
     }
     public FortressPeople fortressPeople;
+
+    [SerializeField]
+    private GameObject[] unitPrefabs;
+    [SerializeField]
+    private GameObject spawnUI;
     public static GameObject selectedFortress;
     private string fortressId;
+    PlayerManagerScript playerManager;
     TextMeshProUGUI peopleCountText;
 
     private void Awake()
     {
+        playerManager = FindObjectOfType<PlayerManagerScript>();
         GetComponentInChildren<Canvas>().enabled = true;
         if (string.IsNullOrEmpty(fortressId))
         {
@@ -72,6 +80,7 @@ public class PeopleManageScript : MonoBehaviour
         canvas.enabled = true;
         canvas.transform.Find("Attack").GetComponent<Button>().onClick.AddListener(PaintAttackRadius);
         canvas.transform.Find("Defend").GetComponent<Button>().onClick.AddListener(PaintDefendsRadius);
+        canvas.transform.Find("Spawn").GetComponent<Button>().onClick.AddListener(SpawnUIOpen);
         while (true)
         {
             if (Input.GetKey(KeyCode.Escape))
@@ -85,6 +94,7 @@ public class PeopleManageScript : MonoBehaviour
     }
     public void HideFortressUI()
     {
+        spawnUI.SetActive(false);
         ClickLogick.isFortressUI = false;
         Canvas canvas = GameObject.Find("FortressUI").GetComponentInChildren<Canvas>();
         canvas.enabled = false;
@@ -133,5 +143,55 @@ public class PeopleManageScript : MonoBehaviour
             tile.GetComponent<ClickLogick>().SelectedMultiply(tile);
         }
         HideFortressUI();
+    }
+    public void SpawnUIOpen()
+    {
+        HideFortressUI();
+        selectedFortress = this.gameObject;
+        spawnUI.SetActive(true);       
+        spawnUI.transform.Find("Builder").GetComponent<Button>().onClick.AddListener(SpawnBuilder);
+        spawnUI.transform.Find("Miner").GetComponent<Button>().onClick.AddListener(SpawnMiner);
+        spawnUI.transform.Find("Lumberjack").GetComponent<Button>().onClick.AddListener(SpawnLumberjack);
+        
+    }
+    void SpawnLumberjack()
+    {
+        if (playerManager.playerResources.Food >= 5)
+        {
+            playerManager.playerResources.Food -= 5;
+            playerManager.UpdateUI();
+            GameObject obj = Instantiate(unitPrefabs[0], selectedFortress.transform.position, unitPrefabs[0].transform.rotation);
+            obj.transform.SetParent(selectedFortress.transform.parent);
+            TurnManagerScript turnManagerScript = FindObjectOfType<TurnManagerScript>();
+            turnManagerScript.UnitControls();
+            HideFortressUI();
+        }
+       
+    }
+    void SpawnMiner()
+    {
+        if (playerManager.playerResources.Food >= 5)
+        {
+            playerManager.playerResources.Food -= 5;
+            playerManager.UpdateUI();
+            GameObject obj = Instantiate(unitPrefabs[1], selectedFortress.transform.position, unitPrefabs[1].transform.rotation);
+            obj.transform.SetParent(selectedFortress.transform.parent);
+            TurnManagerScript turnManagerScript = FindObjectOfType<TurnManagerScript>();
+            turnManagerScript.UnitControls();
+            HideFortressUI();
+        }
+            
+    }
+    void SpawnBuilder() {
+        if(playerManager.playerResources.Food >= 5)
+        {
+            playerManager.playerResources.Food -= 5;
+            playerManager.UpdateUI();
+            GameObject obj = Instantiate(unitPrefabs[2], selectedFortress.transform.position, unitPrefabs[2].transform.rotation);
+            obj.transform.SetParent(selectedFortress.transform.parent);
+            TurnManagerScript turnManagerScript = FindObjectOfType<TurnManagerScript>();
+            turnManagerScript.UnitControls();
+            HideFortressUI();
+        }        
     }
 }

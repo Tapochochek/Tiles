@@ -80,8 +80,7 @@ public class UnitsScript : MonoBehaviour
                 UnitMove,
                 BuildMenuOpen,
                 ShowUnitUI
-            };
-            
+            };           
         }
         else
         {
@@ -134,8 +133,7 @@ public class UnitsScript : MonoBehaviour
                 {
                     tile.GetComponent<ClickLogick>().SelectedMultiply(gameObject);
                 }
-            }
-            
+            }         
         }
         else
         {
@@ -171,11 +169,11 @@ public class UnitsScript : MonoBehaviour
                 Debug.Log("Not enough resources to build!");
                 return;
             }
-            playerManager.SaveResources();
-            playerManager.LoadResources();
+            playerManager.UpdateUI();
             GameObject tileWithUnit = gameObject.transform.parent.gameObject;
             GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
             newBuilding.transform.parent = tileWithUnit.transform;
+            newBuilding.layer = tileWithUnit.layer;
         }
         else
         {

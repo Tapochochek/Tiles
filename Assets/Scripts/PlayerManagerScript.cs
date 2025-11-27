@@ -14,15 +14,13 @@ public class PlayerManagerScript : MonoBehaviour
     }
     public PlayerResources playerResources;
 
-
-    [SerializeField] private GameObject unitList;
     [SerializeField] private TextMeshProUGUI[] resources;
 
     void Start()
     {
-        playerResources.Wood = 0;
-        playerResources.Stone = 0;
-        playerResources.Metal = 0;
+        playerResources.Wood = 10;
+        playerResources.Stone = 10;
+        playerResources.Metal = 10;
         playerResources.Food = 10;
 
         SaveResources();
@@ -31,9 +29,9 @@ public class PlayerManagerScript : MonoBehaviour
 
     public void SetStartResourceValues()
     {
-        playerResources.Wood = 0;
-        playerResources.Stone = 0;
-        playerResources.Metal = 0;
+        playerResources.Wood = 10;
+        playerResources.Stone = 10;
+        playerResources.Metal = 10;
         playerResources.Food = 10;
 
         SaveResources();
@@ -46,6 +44,13 @@ public class PlayerManagerScript : MonoBehaviour
         Debug.Log("Saving resources to: " + path);
         File.WriteAllText(path, json);
     }
+    public void UpdateUI()
+    {
+        resources[0].text = playerResources.Wood.ToString();
+        resources[1].text = playerResources.Stone.ToString();
+        resources[2].text = playerResources.Metal.ToString();
+        resources[3].text = playerResources.Food.ToString();
+    }
     public void LoadResources()
     {
         string path = Path.Combine(Application.persistentDataPath, $"playerResources{TurnManagerScript.currentTurn}.json");
@@ -53,10 +58,7 @@ public class PlayerManagerScript : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             playerResources = JsonConvert.DeserializeObject<PlayerResources>(json);
-            resources[0].text = playerResources.Wood.ToString();
-            resources[1].text = playerResources.Stone.ToString();
-            resources[2].text = playerResources.Metal.ToString();
-            resources[3].text = playerResources.Food.ToString();
+            UpdateUI();
         }
         else
         {
@@ -81,11 +83,6 @@ public class PlayerManagerScript : MonoBehaviour
         {
             playerResources.Food += resources;
         }
-        SaveResources();
-        LoadResources();
-    }
-    public void ButtonUnitsClick()
-    {
-        unitList.SetActive(!unitList.activeSelf);
+        UpdateUI();
     }
 }

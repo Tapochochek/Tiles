@@ -52,23 +52,16 @@ public class TurnManagerScript : MonoBehaviour
         {
             if (building.layer == LayerMask.NameToLayer(turn[turnIndex]))
             {
+                if(building.name == "Farm(Clone)")
+                {
+                    building.GetComponent<BuildFunctional>().Farm();
+                }
+                if (building.name == "Fortress")
+                {
+                    building.GetComponent<BuildFunctional>().Fort();
+                }
+                if(building.name == "Village(Clone)")
                 currentTurnBuildings.Add(building);
-                Debug.Log(building.name);
-            }
-        }
-
-        foreach (GameObject fort in currentTurnBuildings)
-        {
-            if(fort.name == "Fortress")
-            {
-                fort.GetComponent<PeopleManageScript>().AddPeople(1);
-            }
-        }
-        foreach (GameObject farm in currentTurnBuildings)
-        {
-            if (farm.name == "Farm")
-            {
-                player.playerResources.Food += 5;
             }
         }
     }
@@ -84,18 +77,19 @@ public class TurnManagerScript : MonoBehaviour
 
         }
         Debug.Log("Current turn: " + turn[turnIndex]);
+
         UnitControls();
-        
         currentTurn = turn[turnIndex];
+        
 
         if (isFirstRound)
         {
             player.SetStartResourceValues();
         }
         else
-        {
-            BuildingControls();
+        {          
             player.LoadResources();
+            BuildingControls();
         }
     }
 }
