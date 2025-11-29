@@ -52,15 +52,18 @@ public class TurnManagerScript : MonoBehaviour
         {
             if (building.layer == LayerMask.NameToLayer(turn[turnIndex]))
             {
-                if(building.name == "Farm(Clone)")
+                switch (building.name)
                 {
-                    building.GetComponent<BuildFunctional>().Farm();
+                    case "Farm(Clone)":
+                        building.GetComponent<BuildFunctional>().Farm();
+                        break;
+                    case "Fortress":
+                        building.GetComponent<BuildFunctional>().Fort();
+                        break;
+                    case "Village(Clone)":
+                        building.GetComponent<BuildFunctional>().Village();
+                        break;
                 }
-                if (building.name == "Fortress")
-                {
-                    building.GetComponent<BuildFunctional>().Fort();
-                }
-                if(building.name == "Village(Clone)")
                 currentTurnBuildings.Add(building);
             }
         }

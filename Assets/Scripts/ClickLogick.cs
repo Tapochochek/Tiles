@@ -18,7 +18,17 @@ public class ClickLogick : MonoBehaviour
     private List<MeshRenderer> meshRenderers;
     private static GameObject currenUnit;
     private static GameObject selectedTile;
-    
+    private static GameObject currentSpawnPoints;
+
+    [SerializeField] private GameObject spawnPointsBuildings;
+
+    [SerializeField] GameObject wallPrefab;
+    [SerializeField] GameObject wallPreview;
+
+    [SerializeField] GameObject towerPreview;
+    [SerializeField] GameObject towerPrefab;
+
+
     private static List<GameObject> selectedTiles = new List<GameObject>();
     public static bool isFortressUI = false;
 
@@ -33,6 +43,7 @@ public class ClickLogick : MonoBehaviour
     // Готовый метод выделения тайла
     private void OnMouseDown()
     {
+        PeopleManageScript peopleManage = null;
         if (isFortressUI)
         {
             return;
@@ -40,22 +51,47 @@ public class ClickLogick : MonoBehaviour
         //Проверка если ни одни тайл не выделен
         if (selectedTile != null)
         {
-            Diselected(selectedTile);
+            if (selectedTile.GetComponentInChildren<PeopleManageScript>())
+            {
+                peopleManage = selectedTile.GetComponentInChildren<PeopleManageScript>();
+            }
+            Diselected(selectedTile);            
         }
             
         //Снятие выделения со всех выделенных тайлов
         MultiplyDiselected();
         //Выделение текущего тайла
         PaintingTiles(mat);
-
-        
+               
         selectedTile = gameObject;
         if (selectedTile.GetComponentInChildren<PeopleManageScript>() && selectedTile.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
         {
             StartCoroutine(selectedTile.GetComponentInChildren<PeopleManageScript>().ShowFortressUI());
-        }
-    }
+            if (peopleManage.isBuild) peopleManage.isBuild = false;
 
+            peopleManage.HideFortressUI();
+            return;
+        }
+        if(peopleManage == null)
+        {
+            Debug.Log("No PeopleManageScript found on selected tile.");
+        }
+        if (peopleManage.isBuild && selectedTile.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
+        {
+            if (currentSpawnPoints != null)
+            {
+                Destroy(currentSpawnPoints);
+                currentSpawnPoints = null;
+            }
+            GameObject spawnPoints = Instantiate(spawnPointsBuildings, selectedTile.transform.position, selectedTile.transform.rotation, selectedTile.transform);
+            currentSpawnPoints = spawnPoints;
+            peopleManage.isBuild = false;
+
+            peopleManage.HideFortressUI();
+            return;
+        }
+        
+    }
     public void SelectedMultiply(GameObject unit)
     {
         currenUnit = unit;
@@ -153,6 +189,11 @@ public class ClickLogick : MonoBehaviour
                     else if (objects.layer == LayerMask.NameToLayer("Gray"))
                     {
                         objects.GetComponent<Renderer>().material = selectedTile.GetComponent<Renderer>().material;
+                        foreach (var item in objects.GetComponentsInChildren<Renderer>())
+                        {
+                            item.material = selectedTile.GetComponent<Renderer>().material;
+                            item.gameObject.layer = LayerMask.NameToLayer(TurnManagerScript.currentTurn);
+                        }
                         objects.layer = LayerMask.NameToLayer(TurnManagerScript.currentTurn);
                         countPeople--;
                     }

@@ -21,7 +21,10 @@ public class PeopleManageScript : MonoBehaviour
     private GameObject[] unitPrefabs;
     [SerializeField]
     private GameObject spawnUI;
+    [SerializeField]
+    private GameObject buildUI;
     public static GameObject selectedFortress;
+    public bool isBuild;
     private string fortressId;
     PlayerManagerScript playerManager;
     TextMeshProUGUI peopleCountText;
@@ -81,6 +84,7 @@ public class PeopleManageScript : MonoBehaviour
         canvas.transform.Find("Attack").GetComponent<Button>().onClick.AddListener(PaintAttackRadius);
         canvas.transform.Find("Defend").GetComponent<Button>().onClick.AddListener(PaintDefendsRadius);
         canvas.transform.Find("Spawn").GetComponent<Button>().onClick.AddListener(SpawnUIOpen);
+        canvas.transform.Find("Build").GetComponent<Button>().onClick.AddListener(BuildingUIOpen);
         while (true)
         {
             if (Input.GetKey(KeyCode.Escape))
@@ -98,6 +102,28 @@ public class PeopleManageScript : MonoBehaviour
         ClickLogick.isFortressUI = false;
         Canvas canvas = GameObject.Find("FortressUI").GetComponentInChildren<Canvas>();
         canvas.enabled = false;
+
+        try
+        {
+            GameObject canvasUnit = GameObject.Find("SpawnUI");
+            canvasUnit.SetActive(false);
+        }
+        catch
+        {
+            Debug.Log("No SpawnUI activate");
+        }
+
+        try
+        {
+            GameObject canvasBuild = GameObject.Find("BuildingUI");
+            canvasBuild.SetActive(false);
+        }
+        catch
+        {
+            Debug.Log("No BuildingUI activate");
+        }
+
+        
     }
 
     private void PaintAttackRadius()
@@ -143,6 +169,16 @@ public class PeopleManageScript : MonoBehaviour
             tile.GetComponent<ClickLogick>().SelectedMultiply(tile);
         }
         HideFortressUI();
+    }
+
+    public void BuildingUIOpen()
+    {
+        HideFortressUI();
+        selectedFortress = this.gameObject;
+        buildUI.SetActive(true);
+        buildUI.transform.Find("Wall").GetComponent<Button>().onClick.AddListener(Build);
+        buildUI.transform.Find("Tower").GetComponent<Button>().onClick.AddListener(Build);
+
     }
     public void SpawnUIOpen()
     {
@@ -193,5 +229,9 @@ public class PeopleManageScript : MonoBehaviour
             turnManagerScript.UnitControls();
             HideFortressUI();
         }        
+    }
+    void Build()
+    {
+        isBuild = true;
     }
 }

@@ -26,7 +26,20 @@ public class BuildFunctional : MonoBehaviour
 
     public void Village()
     {
-
+        if(gameObject.name == "Village(Clone)")
+        {
+            PeopleManageScript peopleManageScript;
+            PeopleManageScript[] allFort = FindObjectsByType<PeopleManageScript>(FindObjectsSortMode.None);
+            for (int i = 0; i < allFort.Length; i++)
+            {
+                if (allFort[i].gameObject.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
+                {
+                    Debug.Log("Добавили типочка");
+                    peopleManageScript = allFort[i];
+                    peopleManageScript.AddPeople(1);
+                }
+            }
+        }
     }
 
     // Update is called once per frame

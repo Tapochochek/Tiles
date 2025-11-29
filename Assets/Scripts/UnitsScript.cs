@@ -187,7 +187,7 @@ public class UnitsScript : MonoBehaviour
         if (unitType == UnitType.Miner)
         {
             Debug.Log("Checking for mining options...");
-            if (gameObject.transform.parent.Find("Rock(Clone)"))
+            if (gameObject.transform.parent.Find("Rock(Clone)") && gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
             {
                 isOnResourceTile = true;
                 Debug.Log("Can mine stone here!");
@@ -200,7 +200,7 @@ public class UnitsScript : MonoBehaviour
         else if (unitType == UnitType.Lumberjack)
         {
             Debug.Log("Checking for wood chopping options...");
-            if (gameObject.transform.parent.Find("Forest(Clone)"))
+            if (gameObject.transform.parent.Find("Forest(Clone)") && gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
             {
                 isOnResourceTile = true;
                 Debug.Log("Can chop wood here!");
