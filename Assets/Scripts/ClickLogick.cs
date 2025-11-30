@@ -72,10 +72,6 @@ public class ClickLogick : MonoBehaviour
             peopleManage.HideFortressUI();
             return;
         }
-        if(peopleManage == null)
-        {
-            Debug.Log("No PeopleManageScript found on selected tile.");
-        }
         if (peopleManage.isBuild && selectedTile.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn))
         {
             if (currentSpawnPoints != null)

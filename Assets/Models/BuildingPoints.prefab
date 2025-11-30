@@ -319,6 +319,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5627779355717629350}
+  - component: {fileID: 8003755669357863346}
   m_Layer: 10
   m_Name: BuildingPoints
   m_TagString: Untagged
@@ -354,6 +355,34 @@ Transform:
   - {fileID: 1889657099727430708}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8003755669357863346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7446203625988597856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb9f8852133383e4a8843634ca30b2dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newWall: {fileID: 3418587394104339994, guid: bb5c01cf7ac573d42a9b96b08371c13b, type: 3}
+  newTower: {fileID: 2898986548983495511, guid: 5107bc308435a9745b1c7cba857c201d, type: 3}
+  wallsSpawnPoints:
+  - {fileID: 7856005778085417929}
+  - {fileID: 2391245684743015024}
+  - {fileID: 7095808783578853067}
+  - {fileID: 6995950915792437397}
+  - {fileID: 3559035519900256160}
+  - {fileID: 5166567515508428953}
+  towersSpawnPoints:
+  - {fileID: 9109346788319332079}
+  - {fileID: 8424279339730289888}
+  - {fileID: 8424279339730289888}
+  - {fileID: 3853802771039797485}
+  - {fileID: 6539428116978843044}
+  - {fileID: 2977329625150145943}
 --- !u!1 &7856005778085417929
 GameObject:
   m_ObjectHideFlags: 0

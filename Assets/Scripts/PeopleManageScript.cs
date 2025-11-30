@@ -176,8 +176,8 @@ public class PeopleManageScript : MonoBehaviour
         HideFortressUI();
         selectedFortress = this.gameObject;
         buildUI.SetActive(true);
-        buildUI.transform.Find("Wall").GetComponent<Button>().onClick.AddListener(Build);
-        buildUI.transform.Find("Tower").GetComponent<Button>().onClick.AddListener(Build);
+        buildUI.transform.Find("Wall").GetComponent<Button>().onClick.AddListener(BuildWalls);
+        buildUI.transform.Find("Tower").GetComponent<Button>().onClick.AddListener(BuildTowers);
 
     }
     public void SpawnUIOpen()
@@ -230,8 +230,14 @@ public class PeopleManageScript : MonoBehaviour
             HideFortressUI();
         }        
     }
-    void Build()
+    void BuildWalls()
     {
         isBuild = true;
+        SpawnPointsScript.isWalls = true;
+    }
+    void BuildTowers()
+    {
+        isBuild = true;
+        SpawnPointsScript.isWalls = false;
     }
 }
