@@ -196,7 +196,7 @@ public class PeopleManageScript : MonoBehaviour
         {
             playerManager.playerResources.Food -= 5;
             playerManager.UpdateUI();
-            GameObject obj = Instantiate(unitPrefabs[0], selectedFortress.transform.position, unitPrefabs[0].transform.rotation);
+            GameObject obj = Factory.Instance.CreateUnit(UnitType.Lumberjack, selectedFortress.transform.position);
             obj.transform.SetParent(selectedFortress.transform.parent);
             TurnManagerScript turnManagerScript = FindObjectOfType<TurnManagerScript>();
             turnManagerScript.UnitControls();
@@ -210,7 +210,7 @@ public class PeopleManageScript : MonoBehaviour
         {
             playerManager.playerResources.Food -= 5;
             playerManager.UpdateUI();
-            GameObject obj = Instantiate(unitPrefabs[1], selectedFortress.transform.position, unitPrefabs[1].transform.rotation);
+            GameObject obj = Factory.Instance.CreateUnit(UnitType.Miner, selectedFortress.transform.position);
             obj.transform.SetParent(selectedFortress.transform.parent);
             TurnManagerScript turnManagerScript = FindObjectOfType<TurnManagerScript>();
             turnManagerScript.UnitControls();
@@ -223,7 +223,7 @@ public class PeopleManageScript : MonoBehaviour
         {
             playerManager.playerResources.Food -= 5;
             playerManager.UpdateUI();
-            GameObject obj = Instantiate(unitPrefabs[2], selectedFortress.transform.position, unitPrefabs[2].transform.rotation);
+            GameObject obj = Factory.Instance.CreateUnit(UnitType.Builder, selectedFortress.transform.position);
             obj.transform.SetParent(selectedFortress.transform.parent);
             TurnManagerScript turnManagerScript = FindObjectOfType<TurnManagerScript>();
             turnManagerScript.UnitControls();

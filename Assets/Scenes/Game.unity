@@ -1351,6 +1351,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046941172}
   m_CullTransparentMesh: 1
+--- !u!1 &1060684568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1060684570}
+  - component: {fileID: 1060684569}
+  m_Layer: 0
+  m_Name: Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1060684569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060684568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abe2624898c6fd4981d2902cf9a15b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  builderPrefab: {fileID: 4127161214725655446, guid: 42edbc4faebf8b94985103bbe57acb7c, type: 3}
+  minerPrefab: {fileID: 6466568034969099581, guid: 6e54d685843874046854ad64b73ee762, type: 3}
+  lumberjackPrefab: {fileID: 6659212339361257357, guid: 1e5a94e5beece2441a2db3b1c6b0b25a, type: 3}
+  fortressPrefab: {fileID: 6570732515811252766, guid: bce78b8e72411ef4b9e1318d852daad7, type: 3}
+  villagePrefab: {fileID: 8911865404876273760, guid: 18a6184970875b6428937b7f27e424e7, type: 3}
+  wallPrefab: {fileID: 3418587394104339994, guid: bb5c01cf7ac573d42a9b96b08371c13b, type: 3}
+  towerPrefab: {fileID: 2898986548983495511, guid: 5107bc308435a9745b1c7cba857c201d, type: 3}
+  farmPrefab: {fileID: 7694283781252175349, guid: b28567db070314b4895406c0bdf29e26, type: 3}
+--- !u!4 &1060684570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060684568}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.39820093, y: 2.2225938, z: 1.1868501}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1214640392
 GameObject:
   m_ObjectHideFlags: 0
@@ -3393,3 +3445,4 @@ SceneRoots:
   - {fileID: 810726191}
   - {fileID: 859272263}
   - {fileID: 781973250}
+  - {fileID: 1060684570}

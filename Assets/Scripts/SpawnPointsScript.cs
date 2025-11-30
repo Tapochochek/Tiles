@@ -33,7 +33,7 @@ public class SpawnPointsScript : MonoBehaviour
                     previewWall.transform.rotation = closest.transform.rotation;
                     if (Input.GetMouseButtonDown(1))
                     {
-                        GameObject wall = Instantiate(newWall, closest.transform.position, closest.transform.rotation);
+                        GameObject wall = Factory.Instance.CreateBuild(BuildingType.Wall, closest.transform, closest.transform);
                         newWall.name = "Wall";
                         Destroy(closest);
                     }
@@ -48,7 +48,7 @@ public class SpawnPointsScript : MonoBehaviour
                     previewTower.transform.rotation = closest.transform.rotation;
                     if (Input.GetMouseButtonDown(1))
                     {
-                        GameObject tower = Instantiate(newTower, closest.transform.position, closest.transform.rotation);
+                        GameObject tower = Factory.Instance.CreateBuild(BuildingType.Tower, closest.transform, closest.transform);
                         newTower.name = "Tower";
                         Destroy(closest);
                     }

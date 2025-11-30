@@ -155,8 +155,23 @@ public class UnitsScript : MonoBehaviour
         }
     }
     public void Build(GameObject build) {
-
-        if(gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn) && !gameObject.transform.parent.gameObject.GetComponentInChildren<BuildFunctional>())
+        BuildingType type = BuildingType.None;
+        switch (build.name)
+        {
+            case "Fortres":
+                type = BuildingType.Fortress;
+                break;
+            case "Farm":
+                type = BuildingType.Farm;
+                break;
+            case "Village":
+                type = BuildingType.Village;
+                break;
+            default:
+                Debug.Log("Unknown building type!");
+                break;
+        }
+        if (gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer(TurnManagerScript.currentTurn) && !gameObject.transform.parent.gameObject.GetComponentInChildren<BuildFunctional>())
         {
             buttonBuildPanels.SetActive(false);
             if (playerManager.playerResources.Wood >= 10 && playerManager.playerResources.Stone >= 10)
@@ -171,7 +186,7 @@ public class UnitsScript : MonoBehaviour
             }
             playerManager.UpdateUI();
             GameObject tileWithUnit = gameObject.transform.parent.gameObject;
-            GameObject newBuilding = Instantiate(build, tileWithUnit.transform.position, tileWithUnit.transform.rotation);
+            GameObject newBuilding = Factory.Instance.CreateBuild(type, tileWithUnit.transform, tileWithUnit.transform);
             newBuilding.transform.parent = tileWithUnit.transform;
             newBuilding.layer = tileWithUnit.layer;
         }
